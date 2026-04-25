@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Altero — Where Stories Awaken</title>
+  <meta name="description" content="Altero is a next-generation platform for AI chatbot games, interactive storytelling, and text-based RPGs. Build worlds, summon characters, and play out stories without limits." />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- GSAP core + plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+</head>
+<body>
+
+  <!-- Defines the scrollable distance that drives the parallax timeline -->
+  <div class="scrollDist"></div>
+
+  <!-- Top navigation -->
+  <header class="site-nav">
+    <a class="brand" href="#hero">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="brand-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#9b6bff" />
+              <stop offset="100%" stop-color="#3ad6ff" />
+            </linearGradient>
+          </defs>
+          <path d="M16 3 L29 27 H21 L16 17 L11 27 H3 Z" fill="url(#brand-grad)"/>
+          <circle cx="16" cy="22" r="2" fill="#0a0a16"/>
+        </svg>
+      </span>
+      <span class="brand-name">Altero</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#feature-roleplay">Roleplay</a>
+      <a href="#feature-characters">Characters</a>
+      <a href="#feature-worlds">Worlds</a>
+      <a class="nav-cta" href="#cta">Enter Altero</a>
+    </nav>
+  </header>
+
+  <!-- HERO: parallax stack -->
+  <section id="hero" aria-label="Altero hero">
+
+    <!-- Layer: sky / starfield -->
+    <svg class="sky" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#05030f"/>
+          <stop offset="35%" stop-color="#1a0b3a"/>
+          <stop offset="70%" stop-color="#3a1670"/>
+          <stop offset="100%" stop-color="#7a2bb6"/>
+        </linearGradient>
+        <radialGradient id="moon-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stop-color="#fff8e1" stop-opacity="0.85"/>
+          <stop offset="55%" stop-color="#c5a3ff" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#3a1670" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="moon-body" cx="40%" cy="40%" r="60%">
+          <stop offset="0%"  stop-color="#fff5d6"/>
+          <stop offset="70%" stop-color="#e7c98c"/>
+          <stop offset="100%" stop-color="#a37a4b"/>
+        </radialGradient>
+      </defs>
+
+      <rect width="1600" height="900" fill="url(#sky-grad)"/>
+
+      <!-- starfield -->
+      <g fill="#ffffff">
+        <circle cx="80"   cy="120" r="1.1" opacity=".85"/>
+        <circle cx="220"  cy="60"  r="0.7" opacity=".55"/>
+        <circle cx="340"  cy="180" r="1.4" opacity=".9"/>
+        <circle cx="480"  cy="90"  r="0.9" opacity=".7"/>
+        <circle cx="620"  cy="220" r="0.6" opacity=".4"/>
+        <circle cx="780"  cy="40"  r="1.2" opacity=".85"/>
+        <circle cx="920"  cy="160" r="0.8" opacity=".6"/>
+        <circle cx="1080" cy="80"  r="1.5" opacity=".95"/>
+        <circle cx="1240" cy="200" r="0.7" opacity=".5"/>
+        <circle cx="1380" cy="60"  r="1.0" opacity=".75"/>
+        <circle cx="1500" cy="180" r="0.9" opacity=".65"/>
+        <circle cx="120"  cy="320" r="0.6" opacity=".4"/>
+        <circle cx="280"  cy="400" r="1.1" opacity=".8"/>
+        <circle cx="440"  cy="280" r="0.8" opacity=".6"/>
+        <circle cx="600"  cy="380" r="0.5" opacity=".35"/>
+        <circle cx="760"  cy="260" r="1.3" opacity=".9"/>
+        <circle cx="900"  cy="340" r="0.7" opacity=".55"/>
+        <circle cx="1060" cy="420" r="0.9" opacity=".7"/>
+        <circle cx="1220" cy="300" r="0.6" opacity=".45"/>
+        <circle cx="1360" cy="380" r="1.0" opacity=".75"/>
+        <circle cx="1480" cy="260" r="0.7" opacity=".55"/>
+      </g>
+
+      <!-- moon -->
+      <circle cx="1180" cy="240" r="240" fill="url(#moon-glow)"/>
+      <circle cx="1180" cy="240" r="80"  fill="url(#moon-body)"/>
+      <g fill="#a87f4d" opacity=".55">
+        <circle cx="1160" cy="225" r="6"/>
+        <circle cx="1200" cy="255" r="9"/>
+        <circle cx="1175" cy="270" r="4"/>
+        <circle cx="1215" cy="220" r="5"/>
+      </g>
+
+      <!-- nebula whisps -->
+      <g opacity=".35" fill="#9b6bff">
+        <ellipse cx="300"  cy="500" rx="380" ry="60"/>
+        <ellipse cx="1100" cy="620" rx="500" ry="80"/>
+      </g>
+    </svg>
+
+    <!-- Cloud layers: drifting mist -->
+    <svg class="cloud cloud1" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="c1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#c69bff" stop-opacity=".0"/>
+          <stop offset="50%" stop-color="#c69bff" stop-opacity=".55"/>
+          <stop offset="100%" stop-color="#7d3fd6" stop-opacity=".75"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,220
+               C 120,170 220,250 340,210
+               C 460,170 560,240 700,200
+               C 840,160 960,230 1100,200
+               C 1240,170 1360,240 1500,210
+               C 1560,200 1600,210 1600,210
+               L 1600,300 L 0,300 Z"
+            fill="url(#c1)"/>
+    </svg>
+
+    <svg class="cloud cloud2" viewBox="0 0 1600 260" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="c2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#6cd6ff" stop-opacity="0"/>
+          <stop offset="60%" stop-color="#6cd6ff" stop-opacity=".35"/>
+          <stop offset="100%" stop-color="#3a8fd6" stop-opacity=".55"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,160
+               C 160,110 280,180 420,140
+               C 580,100 720,170 880,140
+               C 1040,110 1180,180 1340,140
+               C 1480,110 1600,160 1600,160
+               L 1600,260 L 0,260 Z"
+            fill="url(#c2)"/>
+    </svg>
+
+    <svg class="cloud cloud3" viewBox="0 0 1600 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="c3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#ffc8ff" stop-opacity="0"/>
+          <stop offset="55%" stop-color="#ffc8ff" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#9b6bff" stop-opacity=".4"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,120
+               C 200,80 320,140 520,100
+               C 700,60 860,130 1060,100
+               C 1240,70 1400,140 1600,110
+               L 1600,220 L 0,220 Z"
+            fill="url(#c3)"/>
+    </svg>
+
+    <!-- Mountain layers, far → near -->
+    <svg class="mountBg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="mbg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#2b1b56"/>
+          <stop offset="100%" stop-color="#0d0820"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,640
+               L 60,580 140,620 230,520 320,600 430,500 540,580 660,470
+               L 780,560 900,460 1020,540 1150,450 1270,540 1390,470 1500,540 1600,500
+               L 1600,900 L 0,900 Z"
+            fill="url(#mbg)"/>
+    </svg>
+
+    <svg class="mountMg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="mmg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#1c0f3d"/>
+          <stop offset="100%" stop-color="#070411"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,720
+               L 80,640 180,700 280,560 400,680 520,580 640,700 760,540
+               L 880,680 1000,560 1140,700 1260,580 1380,700 1500,600 1600,680
+               L 1600,900 L 0,900 Z"
+            fill="url(#mmg)"/>
+    </svg>
+
+    <svg class="mountFg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="mfg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#0a0418"/>
+          <stop offset="100%" stop-color="#000000"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,820
+               L 100,720 220,820 340,640 480,820 620,700 760,820 900,660
+               L 1040,820 1180,700 1320,820 1440,720 1600,820
+               L 1600,900 L 0,900 Z"
+            fill="url(#mfg)"/>
+      <!-- foreground silhouette trees -->
+      <g fill="#000">
+        <path d="M180,820 L195,760 L210,820 Z"/>
+        <path d="M260,820 L278,750 L296,820 Z"/>
+        <path d="M1340,820 L1357,755 L1374,820 Z"/>
+        <path d="M1420,820 L1438,765 L1456,820 Z"/>
+      </g>
+    </svg>
+
+    <!-- Foreground copy -->
+    <div class="hero-copy">
+      <p class="kicker">An AI roleplay platform without limits</p>
+      <h1>Where stories <span class="grad-text">awaken.</span></h1>
+      <p class="lede">
+        Altero is a living storyworld engine — summon AI characters, weave dynamic
+        narratives, and step into text-based RPGs that remember everything.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#cta">Start your story</a>
+        <a class="btn btn-ghost" href="#feature-roleplay">Explore features</a>
+      </div>
+    </div>
+
+    <!-- Scroll prompt -->
+    <button id="arrow-btn" type="button" aria-label="Scroll to next section">
+      <svg class="arrow" viewBox="0 0 32 32" width="34" height="34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.25" opacity=".7"/>
+        <path d="M10 14 L16 20 L22 14"
+              fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- CONTENT SECTIONS -->
+  <main class="content">
+
+    <section class="feature" id="feature-roleplay">
+      <div class="feature-inner">
+        <div class="feature-text">
+          <p class="eyebrow">01 — Unrestricted Roleplay</p>
+          <h2>Tell the stories <em>you</em> want to tell.</h2>
+          <p>
+            Altero never breaks character and never breaks the fourth wall. Drive
+            sweeping epics, intimate dramas, or anything in between — your AI
+            co-author follows your lead through every twist, betrayal, and
+            redemption arc.
+          </p>
+          <ul class="bullets">
+            <li>Persistent memory across long sessions</li>
+            <li>Tone, pacing, and POV controls</li>
+            <li>Branching saves so no choice is final</li>
+          </ul>
+        </div>
+        <div class="feature-art" aria-hidden="true">
+          <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="art1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#9b6bff"/>
+                <stop offset="100%" stop-color="#3ad6ff"/>
+              </linearGradient>
+            </defs>
+            <rect x="20" y="40" width="360" height="200" rx="14" fill="#120a2a" stroke="url(#art1)" stroke-width="1"/>
+            <rect x="40" y="64" width="220" height="10" rx="5" fill="#3a2b6a"/>
+            <rect x="40" y="86" width="300" height="10" rx="5" fill="#2a1f4f"/>
+            <rect x="40" y="108" width="180" height="10" rx="5" fill="#2a1f4f"/>
+            <rect x="40" y="140" width="320" height="44" rx="10" fill="#1a1240" stroke="#9b6bff" stroke-opacity=".5"/>
+            <rect x="52" y="156" width="160" height="10" rx="5" fill="#5a4ba0"/>
+            <circle cx="340" cy="162" r="10" fill="url(#art1)"/>
+            <rect x="40" y="200" width="120" height="20" rx="10" fill="url(#art1)" opacity=".85"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature reverse" id="feature-characters">
+      <div class="feature-inner">
+        <div class="feature-text">
+          <p class="eyebrow">02 — Custom AI Characters</p>
+          <h2>Summon companions with <em>soul</em>.</h2>
+          <p>
+            Build characters from the ground up — voice, backstory, motives,
+            secrets — or remix from the community library. Every Altero character
+            evolves as you play, remembering what matters.
+          </p>
+          <ul class="bullets">
+            <li>Drag-and-drop character sheets</li>
+            <li>Long-term and short-term memory layers</li>
+            <li>Shareable cards in the Altero forge</li>
+          </ul>
+        </div>
+        <div class="feature-art" aria-hidden="true">
+          <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="art2" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#3ad6ff"/>
+                <stop offset="100%" stop-color="#1a0b3a"/>
+              </radialGradient>
+            </defs>
+            <rect x="20" y="40" width="360" height="200" rx="14" fill="#120a2a" stroke="#3ad6ff" stroke-opacity=".4"/>
+            <circle cx="120" cy="140" r="56" fill="url(#art2)"/>
+            <circle cx="120" cy="124" r="18" fill="#0d0820"/>
+            <path d="M84 168 Q120 192 156 168" stroke="#0d0820" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <rect x="200" y="98" width="160" height="12" rx="6" fill="#3a2b6a"/>
+            <rect x="200" y="120" width="140" height="10" rx="5" fill="#2a1f4f"/>
+            <rect x="200" y="140" width="160" height="10" rx="5" fill="#2a1f4f"/>
+            <rect x="200" y="170" width="60"  height="22" rx="11" fill="#9b6bff"/>
+            <rect x="270" y="170" width="60"  height="22" rx="11" fill="#3ad6ff"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature" id="feature-worlds">
+      <div class="feature-inner">
+        <div class="feature-text">
+          <p class="eyebrow">03 — Immersive Worlds</p>
+          <h2>Step into worlds that <em>remember</em>.</h2>
+          <p>
+            From neon-drenched megacities to ruined elven kingdoms — Altero's
+            worldbuilder tracks lore, factions, and timelines so the setting reacts
+            to every action you take.
+          </p>
+          <ul class="bullets">
+            <li>Lorebooks with auto-recall</li>
+            <li>Faction reputation and consequences</li>
+            <li>Procedural quests and dungeon seeds</li>
+          </ul>
+        </div>
+        <div class="feature-art" aria-hidden="true">
+          <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="art3" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ff6bd6"/>
+                <stop offset="100%" stop-color="#9b6bff"/>
+              </linearGradient>
+            </defs>
+            <rect x="20" y="40" width="360" height="200" rx="14" fill="#120a2a" stroke="url(#art3)" stroke-width="1"/>
+            <path d="M40 200 L100 140 L160 180 L220 110 L300 170 L360 130 L360 230 L40 230 Z"
+                  fill="#1a0b3a" stroke="#9b6bff" stroke-opacity=".5"/>
+            <circle cx="320" cy="80" r="22" fill="url(#art3)" opacity=".85"/>
+            <g stroke="#3ad6ff" stroke-opacity=".55" fill="none">
+              <circle cx="100" cy="140" r="6"/>
+              <circle cx="220" cy="110" r="6"/>
+              <circle cx="300" cy="170" r="6"/>
+              <path d="M100 140 L220 110 L300 170" stroke-dasharray="4 4"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="cta">
+      <div class="cta-inner">
+        <h2>Your story is already waiting.</h2>
+        <p>Step through the gate. Altero will write the rest with you.</p>
+        <a class="btn btn-primary btn-lg" href="#hero">Enter Altero</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>© <span id="year"></span> Altero. Crafted for storytellers.</p>
+    </footer>
+  </main>
+
+  <script src="main.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
