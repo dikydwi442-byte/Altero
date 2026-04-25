@@ -5,21 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Altero — Where Stories Awaken</title>
   <meta name="description" content="Altero is a next-generation platform for AI chatbot games, interactive storytelling, and text-based RPGs. Build worlds, summon characters, and play out stories without limits." />
+
+  <!-- RPG-style display font + body font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css" />
 
   <!-- GSAP core + plugins -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+
+  <!-- Simplex noise — drives the portal particle field -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
 </head>
-<body>
+<body class="portal-locked">
 
-  <!-- Defines the scrollable distance that drives the parallax timeline -->
-  <div class="scrollDist"></div>
+  <!-- ======================================================================
+       PHASE 1 — Canvas portal overlay
+       ====================================================================== -->
+  <div id="portal-screen" role="button" tabindex="0" aria-label="Enter the Altero portal">
+    <canvas id="portal-canvas"></canvas>
+    <div id="enter-text">TOUCH TO ENTER PORTAL</div>
+  </div>
 
-  <!-- Top navigation -->
+  <!-- ======================================================================
+       Top navigation
+       ====================================================================== -->
   <header class="site-nav">
-    <a class="brand" href="#hero">
+    <a class="brand" href="#wrapper">
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -42,202 +58,42 @@
     </nav>
   </header>
 
-  <!-- HERO: parallax stack -->
-  <section id="hero" aria-label="Altero hero">
+  <!-- ======================================================================
+       PHASE 2 — Mousemove parallax hero
+       data-speed:  px the layer translates per 1.0 of normalized cursor offset
+       data-revert: "true" inverts the direction (foreground vs background)
+       ====================================================================== -->
+  <div id="container">
+    <div id="wrapper">
 
-    <!-- Layer: sky / starfield -->
-    <svg class="sky" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#05030f"/>
-          <stop offset="35%" stop-color="#1a0b3a"/>
-          <stop offset="70%" stop-color="#3a1670"/>
-          <stop offset="100%" stop-color="#7a2bb6"/>
-        </linearGradient>
-        <radialGradient id="moon-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"  stop-color="#fff8e1" stop-opacity="0.85"/>
-          <stop offset="55%" stop-color="#c5a3ff" stop-opacity="0.18"/>
-          <stop offset="100%" stop-color="#3a1670" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="moon-body" cx="40%" cy="40%" r="60%">
-          <stop offset="0%"  stop-color="#fff5d6"/>
-          <stop offset="70%" stop-color="#e7c98c"/>
-          <stop offset="100%" stop-color="#a37a4b"/>
-        </radialGradient>
-      </defs>
+      <div class="p1" data-speed="40"  data-revert="false" aria-hidden="true"></div>
+      <div class="p2" data-speed="80"  data-revert="false" aria-hidden="true"></div>
+      <div class="p3" data-speed="140" data-revert="true"  aria-hidden="true"></div>
 
-      <rect width="1600" height="900" fill="url(#sky-grad)"/>
+      <h1 class="word" data-speed="20" data-revert="true">ALTERO</h1>
 
-      <!-- starfield -->
-      <g fill="#ffffff">
-        <circle cx="80"   cy="120" r="1.1" opacity=".85"/>
-        <circle cx="220"  cy="60"  r="0.7" opacity=".55"/>
-        <circle cx="340"  cy="180" r="1.4" opacity=".9"/>
-        <circle cx="480"  cy="90"  r="0.9" opacity=".7"/>
-        <circle cx="620"  cy="220" r="0.6" opacity=".4"/>
-        <circle cx="780"  cy="40"  r="1.2" opacity=".85"/>
-        <circle cx="920"  cy="160" r="0.8" opacity=".6"/>
-        <circle cx="1080" cy="80"  r="1.5" opacity=".95"/>
-        <circle cx="1240" cy="200" r="0.7" opacity=".5"/>
-        <circle cx="1380" cy="60"  r="1.0" opacity=".75"/>
-        <circle cx="1500" cy="180" r="0.9" opacity=".65"/>
-        <circle cx="120"  cy="320" r="0.6" opacity=".4"/>
-        <circle cx="280"  cy="400" r="1.1" opacity=".8"/>
-        <circle cx="440"  cy="280" r="0.8" opacity=".6"/>
-        <circle cx="600"  cy="380" r="0.5" opacity=".35"/>
-        <circle cx="760"  cy="260" r="1.3" opacity=".9"/>
-        <circle cx="900"  cy="340" r="0.7" opacity=".55"/>
-        <circle cx="1060" cy="420" r="0.9" opacity=".7"/>
-        <circle cx="1220" cy="300" r="0.6" opacity=".45"/>
-        <circle cx="1360" cy="380" r="1.0" opacity=".75"/>
-        <circle cx="1480" cy="260" r="0.7" opacity=".55"/>
-      </g>
+      <p class="word-sub">A living storyworld engine for limitless AI roleplay.</p>
 
-      <!-- moon -->
-      <circle cx="1180" cy="240" r="240" fill="url(#moon-glow)"/>
-      <circle cx="1180" cy="240" r="80"  fill="url(#moon-body)"/>
-      <g fill="#a87f4d" opacity=".55">
-        <circle cx="1160" cy="225" r="6"/>
-        <circle cx="1200" cy="255" r="9"/>
-        <circle cx="1175" cy="270" r="4"/>
-        <circle cx="1215" cy="220" r="5"/>
-      </g>
-
-      <!-- nebula whisps -->
-      <g opacity=".35" fill="#9b6bff">
-        <ellipse cx="300"  cy="500" rx="380" ry="60"/>
-        <ellipse cx="1100" cy="620" rx="500" ry="80"/>
-      </g>
-    </svg>
-
-    <!-- Cloud layers: drifting mist -->
-    <svg class="cloud cloud1" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="c1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#c69bff" stop-opacity=".0"/>
-          <stop offset="50%" stop-color="#c69bff" stop-opacity=".55"/>
-          <stop offset="100%" stop-color="#7d3fd6" stop-opacity=".75"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,220
-               C 120,170 220,250 340,210
-               C 460,170 560,240 700,200
-               C 840,160 960,230 1100,200
-               C 1240,170 1360,240 1500,210
-               C 1560,200 1600,210 1600,210
-               L 1600,300 L 0,300 Z"
-            fill="url(#c1)"/>
-    </svg>
-
-    <svg class="cloud cloud2" viewBox="0 0 1600 260" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="c2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#6cd6ff" stop-opacity="0"/>
-          <stop offset="60%" stop-color="#6cd6ff" stop-opacity=".35"/>
-          <stop offset="100%" stop-color="#3a8fd6" stop-opacity=".55"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,160
-               C 160,110 280,180 420,140
-               C 580,100 720,170 880,140
-               C 1040,110 1180,180 1340,140
-               C 1480,110 1600,160 1600,160
-               L 1600,260 L 0,260 Z"
-            fill="url(#c2)"/>
-    </svg>
-
-    <svg class="cloud cloud3" viewBox="0 0 1600 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="c3" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#ffc8ff" stop-opacity="0"/>
-          <stop offset="55%" stop-color="#ffc8ff" stop-opacity=".22"/>
-          <stop offset="100%" stop-color="#9b6bff" stop-opacity=".4"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,120
-               C 200,80 320,140 520,100
-               C 700,60 860,130 1060,100
-               C 1240,70 1400,140 1600,110
-               L 1600,220 L 0,220 Z"
-            fill="url(#c3)"/>
-    </svg>
-
-    <!-- Mountain layers, far → near -->
-    <svg class="mountBg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="mbg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#2b1b56"/>
-          <stop offset="100%" stop-color="#0d0820"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,640
-               L 60,580 140,620 230,520 320,600 430,500 540,580 660,470
-               L 780,560 900,460 1020,540 1150,450 1270,540 1390,470 1500,540 1600,500
-               L 1600,900 L 0,900 Z"
-            fill="url(#mbg)"/>
-    </svg>
-
-    <svg class="mountMg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="mmg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#1c0f3d"/>
-          <stop offset="100%" stop-color="#070411"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,720
-               L 80,640 180,700 280,560 400,680 520,580 640,700 760,540
-               L 880,680 1000,560 1140,700 1260,580 1380,700 1500,600 1600,680
-               L 1600,900 L 0,900 Z"
-            fill="url(#mmg)"/>
-    </svg>
-
-    <svg class="mountFg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="mfg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#0a0418"/>
-          <stop offset="100%" stop-color="#000000"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,820
-               L 100,720 220,820 340,640 480,820 620,700 760,820 900,660
-               L 1040,820 1180,700 1320,820 1440,720 1600,820
-               L 1600,900 L 0,900 Z"
-            fill="url(#mfg)"/>
-      <!-- foreground silhouette trees -->
-      <g fill="#000">
-        <path d="M180,820 L195,760 L210,820 Z"/>
-        <path d="M260,820 L278,750 L296,820 Z"/>
-        <path d="M1340,820 L1357,755 L1374,820 Z"/>
-        <path d="M1420,820 L1438,765 L1456,820 Z"/>
-      </g>
-    </svg>
-
-    <!-- Foreground copy -->
-    <div class="hero-copy">
-      <p class="kicker">An AI roleplay platform without limits</p>
-      <h1>Where stories <span class="grad-text">awaken.</span></h1>
-      <p class="lede">
-        Altero is a living storyworld engine — summon AI characters, weave dynamic
-        narratives, and step into text-based RPGs that remember everything.
-      </p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#cta">Start your story</a>
         <a class="btn btn-ghost" href="#feature-roleplay">Explore features</a>
       </div>
+
+      <button id="arrow-btn" type="button" aria-label="Scroll to next section">
+        <svg class="arrow" viewBox="0 0 32 32" width="34" height="34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.25" opacity=".7"/>
+          <path d="M10 14 L16 20 L22 14"
+                fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
     </div>
+  </div>
 
-    <!-- Scroll prompt -->
-    <button id="arrow-btn" type="button" aria-label="Scroll to next section">
-      <svg class="arrow" viewBox="0 0 32 32" width="34" height="34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.25" opacity=".7"/>
-        <path d="M10 14 L16 20 L22 14"
-              fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-  </section>
-
-  <!-- CONTENT SECTIONS -->
+  <!-- ======================================================================
+       Feature sections + CTA + footer (scroll target)
+       ====================================================================== -->
   <main class="content">
 
     <section class="feature" id="feature-roleplay">
@@ -359,7 +215,7 @@
       <div class="cta-inner">
         <h2>Your story is already waiting.</h2>
         <p>Step through the gate. Altero will write the rest with you.</p>
-        <a class="btn btn-primary btn-lg" href="#hero">Enter Altero</a>
+        <a class="btn btn-primary btn-lg" href="#wrapper">Enter Altero</a>
       </div>
     </section>
 

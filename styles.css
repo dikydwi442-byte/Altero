@@ -1,6 +1,8 @@
 /* ==========================================================================
    Altero landing page
-   Dark, fantasy-sci-fi aesthetic. Vanilla CSS — no preprocessor.
+   Phase 1: Canvas portal overlay (TOUCH TO ENTER PORTAL)
+   Phase 2: Mousemove parallax hero (#container > #wrapper, dragon theme)
+   Vanilla CSS — no preprocessor.
    ========================================================================== */
 
 :root {
@@ -16,6 +18,9 @@
   --accent-3: #ff6bd6;
   --hero-min: 100svh;
   --shadow-glow: 0 10px 40px rgba(155, 107, 255, .25);
+
+  --font-rpg: 'Cinzel', 'Trajan Pro', 'Cormorant Garamond', serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -28,30 +33,86 @@ html, body {
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
   color: var(--ink);
-  background: var(--bg-0);
+  background: #000;
   line-height: 1.55;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* While the portal is up, freeze page scroll so the user can only move
+   forward by clicking the portal. main.js removes this class on click. */
+body.portal-locked { overflow: hidden; height: 100vh; }
+
 img, svg { display: block; max-width: 100%; }
 
 a { color: inherit; text-decoration: none; }
 
 /* --------------------------------------------------------------------------
-   Scroll distance — drives the ScrollTrigger timeline.
+   PHASE 1 — Canvas portal overlay
    -------------------------------------------------------------------------- */
-.scrollDist {
+#portal-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  /* Spin scaled by JS via a CSS variable when portal flies open */
+  transform-origin: 50% 50%;
+}
+
+#portal-canvas {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
-  height: 200%;
+  height: 100%;
+  display: block;
+}
+
+#enter-text {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-rpg);
+  font-weight: 700;
+  letter-spacing: .35em;
+  font-size: clamp(14px, 2.2vw, 22px);
+  color: #f6e9c2;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 14px 28px;
+  border: 1px solid rgba(246, 233, 194, .22);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, .35);
+  backdrop-filter: blur(2px);
+  text-shadow:
+    0 0 6px  rgba(255, 220, 130, .85),
+    0 0 18px rgba(255, 170, 60,  .55),
+    0 0 38px rgba(155, 107, 255, .45);
+  animation: portal-glow 2.6s ease-in-out infinite;
+  user-select: none;
   pointer-events: none;
-  z-index: 0;
+}
+
+@keyframes portal-glow {
+  0%,100% {
+    text-shadow:
+      0 0 6px  rgba(255, 220, 130, .85),
+      0 0 18px rgba(255, 170, 60,  .55),
+      0 0 38px rgba(155, 107, 255, .45);
+    opacity: .92;
+  }
+  50% {
+    text-shadow:
+      0 0 10px rgba(255, 230, 160, 1),
+      0 0 28px rgba(255, 140, 60,  .85),
+      0 0 60px rgba(155, 107, 255, .8);
+    opacity: 1;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -74,8 +135,9 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  font-family: var(--font-rpg);
   font-weight: 700;
-  letter-spacing: .12em;
+  letter-spacing: .22em;
   text-transform: uppercase;
   font-size: 14px;
 }
@@ -113,115 +175,121 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* --------------------------------------------------------------------------
-   HERO — parallax stack
+   PHASE 2 — Mousemove parallax hero
    -------------------------------------------------------------------------- */
-#hero {
+#container {
   position: relative;
   width: 100%;
   height: var(--hero-min);
-  min-height: 600px;
+  min-height: 620px;
   overflow: hidden;
-  background: var(--bg-0);
+  background: #050314;
 }
 
-/* Common rules for parallax layers — fixed so they stay in viewport while
-   the timeline scrubs their `y` transform. */
-#hero .sky,
-#hero .cloud1,
-#hero .cloud2,
-#hero .cloud3,
-#hero .mountBg,
-#hero .mountMg,
-#hero .mountFg {
-  position: fixed;
-  top: 0;
-  left: 0;
+#wrapper {
+  position: relative;
   width: 100%;
-  height: var(--hero-min);
-  min-height: 600px;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Each parallax layer fills the wrapper edge-to-edge with a tiny extra
+   bleed so its translate doesn't expose the background. */
+#wrapper .p1,
+#wrapper .p2,
+#wrapper .p3 {
+  position: absolute;
+  top: -8%;
+  left: -8%;
+  width: 116%;
+  height: 116%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
   pointer-events: none;
   will-change: transform;
 }
 
-/* Stack: sky (back) → mountFg (front) */
-.sky      { z-index: 1; }
-.cloud3   { z-index: 2; opacity: .9; }
-.mountBg  { z-index: 3; }
-.cloud2   { z-index: 4; opacity: .85; }
-.mountMg  { z-index: 5; }
-.cloud1   { z-index: 6; }
-.mountFg  { z-index: 7; }
-
-/* Cloud bands sit a bit lower so the parallax shows them rising up */
-.cloud1, .cloud2, .cloud3 {
-  height: auto;
-  bottom: auto;
-  top: 30%;
-}
-.cloud1 { top: 55%; }
-.cloud2 { top: 42%; }
-.cloud3 { top: 32%; }
-
-/* Mountains anchor to the bottom of the viewport */
-.mountBg, .mountMg, .mountFg {
-  top: auto;
-  bottom: 0;
-  height: 70%;
-}
-.mountBg { height: 65%; }
-.mountMg { height: 70%; }
-.mountFg { height: 78%; }
-
-/* Hero copy sits above the parallax stack */
-.hero-copy {
-  position: relative;
-  z-index: 10;
-  max-width: 720px;
-  margin: 0 auto;
-  padding: clamp(120px, 22vh, 220px) clamp(24px, 5vw, 64px) 0;
-  text-align: center;
+#wrapper .p1 {
+  z-index: 1;
+  background-image: url('//caraujo_pens.surge.sh/images/S6WCriT.jpg');
+  /* Slight dim so foreground reads cleanly */
+  filter: brightness(0.85) saturate(1.05);
 }
 
-.kicker {
-  margin: 0 0 16px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .25em;
+#wrapper .p2 {
+  z-index: 2;
+  background-image: url('//caraujo_pens.surge.sh/images/aeffA4C.png');
+  background-size: contain;
+  background-position: center 58%;
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .6));
+}
+
+#wrapper .p3 {
+  z-index: 4;
+  background-image: url('//caraujo_pens.surge.sh/images/QAyjA6B.png');
+  background-size: cover;
+  background-position: center bottom;
+}
+
+/* The big RPG word — absolutely centered between the dragon and foreground. */
+#wrapper .word {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-rpg);
+  font-weight: 900;
   text-transform: uppercase;
-  color: var(--ink-dim);
+  letter-spacing: clamp(.12em, 1.2vw, .28em);
+  font-size: clamp(56px, 13vw, 200px);
+  line-height: 1;
+  color: #f6e9c2;
+  text-shadow:
+    0 4px 18px rgba(0, 0, 0, .85),
+    0 0 24px rgba(255, 170, 60, .35),
+    0 0 60px rgba(155, 107, 255, .35);
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform;
 }
 
-.hero-copy h1 {
-  margin: 0 0 18px;
-  font-size: clamp(40px, 7vw, 84px);
-  line-height: 1.02;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  text-shadow: 0 4px 30px rgba(0,0,0,.55);
+#wrapper .word-sub {
+  position: absolute;
+  top: calc(50% + clamp(46px, 9vw, 130px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.4vw, 18px);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(246, 233, 194, .85);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .85);
+  text-align: center;
+  pointer-events: none;
 }
 
-.grad-text {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-}
-
-.lede {
-  margin: 0 auto 28px;
-  max-width: 560px;
-  color: var(--ink-dim);
-  font-size: clamp(15px, 1.4vw, 18px);
-  text-shadow: 0 2px 14px rgba(0,0,0,.55);
-}
-
-.hero-actions {
+#wrapper .hero-actions {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(96px, 14vh, 150px);
+  transform: translateX(-50%);
+  z-index: 5;
   display: inline-flex;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
 }
 
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -254,13 +322,13 @@ a { color: inherit; text-decoration: none; }
 .btn-lg { height: 52px; padding: 0 28px; font-size: 15px; }
 
 /* --------------------------------------------------------------------------
-   Scroll arrow
+   Scroll arrow — sits inside #wrapper, anchored to its bottom
    -------------------------------------------------------------------------- */
 #arrow-btn {
-  position: fixed;
-  z-index: 20;
+  position: absolute;
+  z-index: 6;
   left: 50%;
-  bottom: 32px;
+  bottom: 28px;
   transform: translateX(-50%);
   width: 56px;
   height: 56px;
@@ -295,7 +363,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* --------------------------------------------------------------------------
-   Content sections
+   Content sections (scroll target after the parallax hero)
    -------------------------------------------------------------------------- */
 .content {
   position: relative;
@@ -335,6 +403,7 @@ a { color: inherit; text-decoration: none; }
 
 .eyebrow {
   margin: 0 0 14px;
+  font-family: var(--font-rpg);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: .3em;
@@ -344,6 +413,8 @@ a { color: inherit; text-decoration: none; }
 
 .feature h2 {
   margin: 0 0 18px;
+  font-family: var(--font-rpg);
+  font-weight: 700;
   font-size: clamp(28px, 3.6vw, 44px);
   line-height: 1.1;
   letter-spacing: -0.01em;
@@ -410,6 +481,8 @@ a { color: inherit; text-decoration: none; }
 
 .cta h2 {
   margin: 0 0 14px;
+  font-family: var(--font-rpg);
+  font-weight: 700;
   font-size: clamp(30px, 4vw, 52px);
   letter-spacing: -0.01em;
 }
@@ -433,13 +506,11 @@ a { color: inherit; text-decoration: none; }
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  #hero .sky,
-  #hero .cloud1,
-  #hero .cloud2,
-  #hero .cloud3,
-  #hero .mountBg,
-  #hero .mountMg,
-  #hero .mountFg {
+  #wrapper .p1,
+  #wrapper .p2,
+  #wrapper .p3,
+  #wrapper .word {
     will-change: auto;
   }
+  #enter-text { animation: none; }
 }
