@@ -194,17 +194,19 @@ a { color: inherit; text-decoration: none; }
   isolation: isolate;
 }
 
-/* Each parallax layer fills the wrapper edge-to-edge with a tiny extra
-   bleed so its translate doesn't expose the background. */
+/* Each parallax layer is sized 110vw × 110vh and offset by -5% so the
+   mousemove translate never exposes the wrapper's edges. Hot-swap the
+   background-image URLs (e.g. for transparent PNGs) without touching the
+   layout. */
 #wrapper .p1,
 #wrapper .p2,
 #wrapper .p3 {
   position: absolute;
-  top: -8%;
-  left: -8%;
-  width: 116%;
-  height: 116%;
-  background-position: center center;
+  top: -5%;
+  left: -5%;
+  width: 110vw;
+  height: 110vh;
+  background-position: center bottom;
   background-repeat: no-repeat;
   background-size: cover;
   pointer-events: none;
@@ -213,33 +215,31 @@ a { color: inherit; text-decoration: none; }
 
 #wrapper .p1 {
   z-index: 1;
-  background-image: url('//caraujo_pens.surge.sh/images/S6WCriT.jpg');
+  background-image: url('./project%202.jpg');
   /* Slight dim so foreground reads cleanly */
   filter: brightness(0.85) saturate(1.05);
 }
 
 #wrapper .p2 {
   z-index: 2;
-  background-image: url('//caraujo_pens.surge.sh/images/aeffA4C.png');
-  background-size: contain;
-  background-position: center 58%;
-  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .6));
+  background-image: url('./project%201.jpg');
 }
 
 #wrapper .p3 {
   z-index: 4;
-  background-image: url('//caraujo_pens.surge.sh/images/QAyjA6B.png');
-  background-size: cover;
-  background-position: center bottom;
+  background-image: url('./project%203.jpg');
 }
 
-/* The big RPG word — absolutely centered between the dragon and foreground. */
+/* The big RPG word — absolutely centered. While the .p3 image is an opaque
+   JPG it would obscure the word, so we sit above it; once .p3 is swapped
+   for a transparent PNG, drop this back to z-index: 3 to nest the word
+   between dragon and foreground. */
 #wrapper .word {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 3;
+  z-index: 5;
   margin: 0;
   padding: 0;
   font-family: var(--font-rpg);

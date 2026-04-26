@@ -141,7 +141,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
     });
 
     tl.to(enterTxt, { opacity: 0, duration: 0.35, ease: 'power1.out' }, 0)
-      .to(canvas,   { scale: 8, duration: 1.5, ease: 'power3.in', transformOrigin: '50% 50%' }, 0)
+      .to(canvas,   { scale: 20, duration: 1.5, ease: 'power3.in', transformOrigin: '50% 50%' }, 0)
       .to(screen,   { opacity: 0, duration: 1.5, ease: 'power2.inOut' }, 0);
   }
 
@@ -175,14 +175,13 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
     const offY = (e.clientY - halfH) / halfH;
 
     for (const layer of layers) {
-      const speed  = parseFloat(layer.dataset.speed)  || 0;
-      const revert = layer.dataset.revert === 'true' ? -1 : 1;
+      const speed = parseFloat(layer.dataset.speed) || 0;
 
       gsap.to(layer, {
-        x: offX * speed * revert,
-        y: offY * speed * revert,
+        x: offX * speed,
+        y: offY * speed,
         duration: 1,
-        ease: 'power1.out',
+        ease: 'power2.out',
         overwrite: 'auto'
       });
     }
