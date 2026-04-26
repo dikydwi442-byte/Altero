@@ -213,21 +213,32 @@ a { color: inherit; text-decoration: none; }
   will-change: transform;
 }
 
+/* Canonical asset URLs (per spec). main.js falls back to the bundled
+   copies at the repo root if raw.githubusercontent.com 404s (private-repo
+   case). Either path resolves to the same underlying files. */
 #wrapper .p1 {
   z-index: 1;
-  background-image: url('./project%202.jpg');
+  background-image: url('https://raw.githubusercontent.com/dikydwi442-byte/Altero/06dcad0bd90f3d6e1a2ed0e5748771b812e04c3c/project%201.jpg');
   /* Slight dim so foreground reads cleanly */
   filter: brightness(0.85) saturate(1.05);
 }
 
+/* Midground: soft radial alpha mask fades the castle/dragon edges into
+   the mountain backdrop so the JPG's rectangular cut isn't visible. */
 #wrapper .p2 {
   z-index: 2;
-  background-image: url('./project%201.jpg');
+  background-image: url('https://raw.githubusercontent.com/dikydwi442-byte/Altero/06dcad0bd90f3d6e1a2ed0e5748771b812e04c3c/project%202.jpg');
+  -webkit-mask-image: radial-gradient(ellipse 78% 72% at 50% 58%, #000 52%, transparent 100%);
+          mask-image: radial-gradient(ellipse 78% 72% at 50% 58%, #000 52%, transparent 100%);
 }
 
+/* Foreground: off-center mask concentrates opacity on the lower-left
+   knight and fades the rest, letting the midground castle read through. */
 #wrapper .p3 {
   z-index: 4;
-  background-image: url('./project%203.jpg');
+  background-image: url('https://raw.githubusercontent.com/dikydwi442-byte/Altero/06dcad0bd90f3d6e1a2ed0e5748771b812e04c3c/project%203.jpg');
+  -webkit-mask-image: radial-gradient(ellipse 58% 88% at 22% 62%, #000 42%, rgba(0,0,0,.4) 70%, transparent 96%);
+          mask-image: radial-gradient(ellipse 58% 88% at 22% 62%, #000 42%, rgba(0,0,0,.4) 70%, transparent 96%);
 }
 
 /* The big RPG word — absolutely centered. While the .p3 image is an opaque

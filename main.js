@@ -9,6 +9,35 @@
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+/* ---------------------------------------------------------------------------
+ * Raw-URL → local-file fallback for the parallax backgrounds.
+ * The CSS references the canonical raw.githubusercontent URLs (per spec),
+ * which 404 if the repo is private. This probes each URL; on failure it
+ * swaps the layer's background to the bundled JPG sitting next to index.html
+ * so the deployed site still renders. No-op when the raw URLs load.
+ * ------------------------------------------------------------------------- */
+(function ensureParallaxAssets () {
+  const assets = [
+    { sel: '.p1', local: './project%201.jpg' },
+    { sel: '.p2', local: './project%202.jpg' },
+    { sel: '.p3', local: './project%203.jpg' }
+  ];
+  for (const { sel, local } of assets) {
+    const el = document.querySelector(sel);
+    if (!el) continue;
+    const css = getComputedStyle(el).backgroundImage;
+    const m = css.match(/url\(["']?([^"')]+)["']?\)/);
+    if (!m) continue;
+    const raw = m[1];
+    const probe = new Image();
+    probe.onerror = () => {
+      // Keep the mask/filter declarations; only swap the URL.
+      el.style.backgroundImage = `url('${local}')`;
+    };
+    probe.src = raw;
+  }
+})();
+
 /* ===========================================================================
  * Phase 1 — Canvas portal
  * ========================================================================= */
@@ -180,7 +209,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
       gsap.to(layer, {
         x: offX * speed,
         y: offY * speed,
-        duration: 1,
+        duration: 0.5,
         ease: 'power2.out',
         overwrite: 'auto'
       });
