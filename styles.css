@@ -241,15 +241,15 @@ a { color: inherit; text-decoration: none; }
           mask-image: radial-gradient(ellipse 58% 88% at 22% 62%, #000 42%, rgba(0,0,0,.4) 70%, transparent 96%);
 }
 
-/* The big RPG word — absolutely centered. While the .p3 image is an opaque
-   JPG it would obscure the word, so we sit above it; once .p3 is swapped
-   for a transparent PNG, drop this back to z-index: 3 to nest the word
-   between dragon and foreground. */
+/* The big RPG word — absolutely centered. Centering uses xPercent/yPercent
+   set in main.js (not a CSS translate) so the mousemove parallax `x`/`y`
+   tweens don't clobber it. While the .p3 image is an opaque JPG it would
+   obscure the word, so we sit above it; once .p3 is swapped for a
+   transparent PNG, drop this back to z-index: 3. */
 #wrapper .word {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 5;
   margin: 0;
   padding: 0;

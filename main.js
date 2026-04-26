@@ -191,6 +191,16 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
   const layers = Array.from(wrapper.querySelectorAll('[data-speed]'));
   if (!layers.length) return;
 
+  // .word is centred with top/left: 50% + translate(-50%, -50%). If we let
+  // GSAP inherit that from CSS, the first gsap.to({x, y}) will overwrite the
+  // centering translate and the title will snap off-centre. Seat the
+  // centering in GSAP's xPercent/yPercent track (which survives x/y tweens).
+  for (const layer of layers) {
+    if (layer.classList.contains('word')) {
+      gsap.set(layer, { xPercent: -50, yPercent: -50 });
+    }
+  }
+
   let halfW = innerWidth / 2;
   let halfH = innerHeight / 2;
   addEventListener('resize', () => {
