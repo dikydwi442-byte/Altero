@@ -195,9 +195,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Each parallax layer is sized 110vw × 110vh and offset by -5% so the
-   mousemove translate never exposes the wrapper's edges. Hot-swap the
-   background-image URLs (e.g. for transparent PNGs) without touching the
-   layout. */
+   mousemove translate never exposes the wrapper's edges. All three layers
+   share `background-position: center bottom` so the assets stack pinned to
+   the same anchor — exactly how the original composition was framed. */
 #wrapper .p1,
 #wrapper .p2,
 #wrapper .p3 {
@@ -208,49 +208,48 @@ a { color: inherit; text-decoration: none; }
   height: 110vh;
   background-position: center bottom;
   background-repeat: no-repeat;
-  background-size: cover;
   pointer-events: none;
   will-change: transform;
 }
 
-/* Canonical asset URLs (per spec). main.js falls back to the bundled
-   copies at the repo root if raw.githubusercontent.com 404s (private-repo
-   case). Either path resolves to the same underlying files. */
+/* .p1 — base mountain/lake plate. Fills the frame as cover so it always
+   reaches every edge regardless of viewport ratio. */
 #wrapper .p1 {
   z-index: 1;
-  background-image: url('https://raw.githubusercontent.com/dikydwi442-byte/Altero/06dcad0bd90f3d6e1a2ed0e5748771b812e04c3c/project%201.jpg');
-  /* Slight dim so foreground reads cleanly */
-  filter: brightness(0.85) saturate(1.05);
+  background-image: url('./assets/images/base_bg.jpg');
+  background-size: cover;
+  filter: brightness(0.88) saturate(1.05);
 }
 
-/* Midground: soft radial alpha mask fades the castle/dragon edges into
-   the mountain backdrop so the JPG's rectangular cut isn't visible. */
+/* .p2 — castle + dragon, pre-cut to transparent PNG. `contain` preserves
+   the asset's silhouette so the dragon/spires don't get cropped on tall
+   viewports; `center bottom` plants it on the same horizon as the base. */
 #wrapper .p2 {
   z-index: 2;
-  background-image: url('https://raw.githubusercontent.com/dikydwi442-byte/Altero/06dcad0bd90f3d6e1a2ed0e5748771b812e04c3c/project%202.jpg');
-  -webkit-mask-image: radial-gradient(ellipse 78% 72% at 50% 58%, #000 52%, transparent 100%);
-          mask-image: radial-gradient(ellipse 78% 72% at 50% 58%, #000 52%, transparent 100%);
+  background-image: url('./assets/images/mid_transparent.png');
+  background-size: contain;
+  background-position: center bottom;
+  filter: drop-shadow(0 24px 50px rgba(0, 0, 0, .55));
 }
 
-/* Foreground: off-center mask concentrates opacity on the lower-left
-   knight and fades the rest, letting the midground castle read through. */
+/* .p3 — knight + cliff edge, pre-cut. `contain` to preserve silhouette;
+   sits above the .word so the title reads from behind the figure. */
 #wrapper .p3 {
   z-index: 4;
-  background-image: url('https://raw.githubusercontent.com/dikydwi442-byte/Altero/06dcad0bd90f3d6e1a2ed0e5748771b812e04c3c/project%203.jpg');
-  -webkit-mask-image: radial-gradient(ellipse 58% 88% at 22% 62%, #000 42%, rgba(0,0,0,.4) 70%, transparent 96%);
-          mask-image: radial-gradient(ellipse 58% 88% at 22% 62%, #000 42%, rgba(0,0,0,.4) 70%, transparent 96%);
+  background-image: url('./assets/images/fore_transparent.png');
+  background-size: contain;
+  background-position: center bottom;
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .65));
 }
 
-/* The big RPG word — absolutely centered. Centering uses xPercent/yPercent
-   set in main.js (not a CSS translate) so the mousemove parallax `x`/`y`
-   tweens don't clobber it. While the .p3 image is an opaque JPG it would
-   obscure the word, so we sit above it; once .p3 is swapped for a
-   transparent PNG, drop this back to z-index: 3. */
+/* .word — absolutely centered between .p2 (castle/dragon) and .p3 (knight
+   + cliff) for parallax depth. Centering lives in xPercent/yPercent set in
+   main.js so the mousemove parallax `x`/`y` tweens don't clobber it. */
 #wrapper .word {
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 5;
+  z-index: 3;
   margin: 0;
   padding: 0;
   font-family: var(--font-rpg);

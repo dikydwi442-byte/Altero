@@ -60,17 +60,19 @@
 
   <!-- ======================================================================
        PHASE 2 — Mousemove parallax hero
-       data-speed: px the layer translates per 1.0 of normalized cursor offset.
-       .p1 is the slowest (background), .p3 the fastest (foreground knight).
+       data-speed:  px the layer translates per 1.0 of normalized cursor offset.
+       data-revert: "true" inverts direction (used on .p1 for opposing drift
+                    so the background subtly counter-moves against the cursor,
+                    selling depth-of-field).
        ====================================================================== -->
   <div id="container">
     <div id="wrapper">
 
-      <div class="p1" data-speed="20"  aria-hidden="true"></div>
-      <div class="p2" data-speed="60"  aria-hidden="true"></div>
-      <div class="p3" data-speed="120" aria-hidden="true"></div>
+      <div class="p1" data-speed="15"  data-revert="true"  aria-hidden="true"></div>
+      <div class="p2" data-speed="55"                       aria-hidden="true"></div>
+      <div class="p3" data-speed="130"                      aria-hidden="true"></div>
 
-      <h1 class="word" data-speed="40">ALTERO</h1>
+      <h1 class="word" data-speed="30">ALTERO</h1>
 
       <p class="word-sub">A living storyworld engine for limitless AI roleplay.</p>
 
