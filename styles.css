@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Altero — Hero parallax
+   ========================================================================== */
+
+:root {
+  --font-rpg:  'Cinzel', 'Trajan Pro', serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: #000;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+/* --------------------------------------------------------------------------
+   Full-screen container
+   -------------------------------------------------------------------------- */
+#container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+#wrapper {
+  position: absolute;
+  inset: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Parallax layers
+   -------------------------------------------------------------------------- */
+.p1, .p2, .p3 {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Base layer: landscape photo */
+.p1 {
+  z-index: 6;
+  background-image: url('/assets/project 2.jpg');
+  background-size: cover;
+  background-position: center center;
+}
+
+/* Mid layer: castle PNG — spire peeks through the T-L letter gap */
+.p2 {
+  z-index: 8;
+  background-image: url('/assets/project 5.png');
+  background-size: 55% auto;
+  background-position: right bottom;
+}
+
+/* Front layer: knight PNG */
+.p3 {
+  z-index: 10;
+  background-image: url('/assets/project 4.png');
+  background-size: 45% auto;
+  background-position: left bottom;
+}
+
+/* --------------------------------------------------------------------------
+   Hero title
+   z-index 7 keeps it between base (6) and castle (8) for the spire effect.
+   -------------------------------------------------------------------------- */
+.word {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  z-index: 7;
+
+  font-family: var(--font-rpg);
+  font-weight: 900;
+  font-size: 15vw;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #E8E2D2;
+
+  text-shadow:
+    0px 15px 30px rgba(0, 0, 0, 0.9),
+    0px 0px 25px rgba(135, 206, 235, 0.6);
+
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .p1, .p2, .p3, .word { will-change: auto; }
+}

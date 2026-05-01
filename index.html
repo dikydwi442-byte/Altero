@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Altero — Where Stories Awaken</title>
+  <meta name="description" content="Altero is a next-generation platform for AI chatbot games, interactive storytelling, and text-based RPGs." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Full-screen hero with parallax layers -->
+  <div id="container">
+    <div id="wrapper">
+
+      <!-- Base layer: landscape background (z-index 6) -->
+      <div class="p1" data-speed="0.01" aria-hidden="true"></div>
+
+      <!-- Mid layer: castle PNG — z-index 8, peeks through letter gap in ALTERO -->
+      <div class="p2" data-speed="0.03" aria-hidden="true"></div>
+
+      <!-- Front layer: knight PNG — z-index 10, foreground -->
+      <div class="p3" data-speed="0.05" aria-hidden="true"></div>
+
+      <!-- Title — z-index 7, sandwiched between base and castle so spire peeks through -->
+      <h1 class="word" data-speed="0.02">ALTERO</h1>
+
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+  <script>document.getElementById && void 0;</script>
+</body>
+</html>
